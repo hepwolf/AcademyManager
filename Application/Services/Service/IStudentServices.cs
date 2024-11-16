@@ -2,7 +2,7 @@
 using AcademyManager.Domain.Entities;
 using AcademyManager.Model;
 
-namespace AcademyManager.Application.Services
+namespace AcademyManager.Application.Services.Service
 {
     public interface IStudentServices
     {
@@ -15,4 +15,3 @@ namespace AcademyManager.Application.Services
         Task<bool> TransferStudentToNewCourseAsync(Guid studentId, Guid oldCourseId, Guid newCourseId);
     }
 }
-

@@ -2,25 +2,24 @@
 using AcademyManager.Domain.Entities;
 using AcademyManager.Domain.Repositories.CommandRepositories;
 using AcademyManager.Domain.Repositories.QueryRepositories;
-using AcademyManager.Infrastructure.Repositories;
 
-namespace AcademyManager.Application.Services
+namespace AcademyManager.Application.Services.Service
 {
-    public class AcademyServices : IAcademyServices
+    public class AcademyServices: IAcademyServices
     {
         private readonly IAcademyQueryRepository _academyQueryRepository;
         private readonly IAcademyCommandRepository _academyCommandRepository;
 
         public AcademyServices(IAcademyQueryRepository academyQueryRepository, IAcademyCommandRepository academyCommandRepository)
         {
-           _academyQueryRepository = academyQueryRepository;   
-           _academyCommandRepository = academyCommandRepository;    
+            _academyQueryRepository = academyQueryRepository;
+            _academyCommandRepository = academyCommandRepository;
         }
 
 
-        public  async Task<Guid> CreateNewAcademy(AcademyDto academyDto)
+        public async Task<Guid> CreateNewAcademy(AcademyDto academyDto)
         {
-            Academy academy = new ()   
+            Academy academy = new()
             {
                 Name = academyDto.Name,
             };
@@ -30,9 +29,6 @@ namespace AcademyManager.Application.Services
             await _academyCommandRepository.SaveChangesAsync();
             return academy.Id;
 
-
-           
-           
         }
 
         public async Task<IEnumerable<Academy>> GetAllAcademiesAsync()
@@ -42,8 +38,8 @@ namespace AcademyManager.Application.Services
 
         public async Task<Academy> GetByAcademyIdAsync(Guid Id)
         {
-           var academy = await _academyQueryRepository.GetByIdAsync(Id); 
-            return academy; 
+            var academy = await _academyQueryRepository.GetByIdAsync(Id);
+            return academy;
         }
     }
 }

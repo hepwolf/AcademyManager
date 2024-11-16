@@ -3,26 +3,25 @@ using AcademyManager.Application.Mapper;
 using AcademyManager.Domain.Entities;
 using AcademyManager.Domain.Repositories.CommandRepositories;
 using AcademyManager.Domain.Repositories.QueryRepositories;
-using AcademyManager.Infrastructure.Repositories;
 using AcademyManager.Model;
 
-namespace AcademyManager.Application.Services
+namespace AcademyManager.Application.Services.Service
 {
-    public class StudentServices : IStudentServices
+    public class StudentServices:IStudentServices
     {
         private readonly IStudentCommandRepository _studentCommandRepository;
         private readonly IStudentQueryRepository _studentQueryRepository;
 
-        public StudentServices(IStudentQueryRepository studentQueryRepository , IStudentCommandRepository studentCommandRepository)
+        public StudentServices(IStudentQueryRepository studentQueryRepository, IStudentCommandRepository studentCommandRepository)
         {
-                _studentCommandRepository = studentCommandRepository;
-                _studentQueryRepository = studentQueryRepository;   
+            _studentCommandRepository = studentCommandRepository;
+            _studentQueryRepository = studentQueryRepository;
         }
         public async Task<Guid> CreateNewStudentAsync(StudentDto studentDto)
         {
             Student newStudent = new()
             {
-                Name = studentDto.Name,   
+                Name = studentDto.Name,
             };
             await _studentCommandRepository.CreateAsync(newStudent);
             await _studentCommandRepository.SaveChangesAsync();

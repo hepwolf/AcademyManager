@@ -13,6 +13,17 @@ namespace AcademyManager.Infrastructure.Repositories.QueryRepositories
         {
             _context = context;
         }
+
+        public async Task<IEnumerable<UserAccount>> GetAllAsync()
+        {
+            return await _context.Set<UserAccount>().ToListAsync();
+        }
+
+        public async Task<UserAccount> GetByIdAsync(Guid Id)
+        {
+           return await _context.Set<UserAccount>().FindAsync(Id);
+        }
+
         public async Task<UserAccount> GetUserByEmailAsync(string email)
         {
             return await _context.UserAccunts.FirstOrDefaultAsync(u => u.Email == email);

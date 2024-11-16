@@ -10,7 +10,9 @@ namespace AcademyManager.Infrastructure.Configuration
         {
 
             // key 
-            builder.HasKey(ur => new {ur.UserId, ur.RoleId });
+            builder.HasKey(ur => ur.Id); // Define Id as the primary key
+            builder.Property(ur => ur.Id)
+                   .ValueGeneratedOnAdd();
 
             // Navigation Between UserRole & UserAccunt
             builder.HasOne(ur => ur.UserAccunt)
@@ -21,6 +23,8 @@ namespace AcademyManager.Infrastructure.Configuration
             builder.HasOne(ur => ur.Role)
                .WithMany(r => r.UserRoles)
                .HasForeignKey(ur => ur.RoleId);
+
+           
         }
     }
 }

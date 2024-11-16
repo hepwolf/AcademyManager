@@ -10,7 +10,5 @@ namespace AcademyManager.Infrastructure.Configuration
         {
             builder.ToTable("Academy").HasKey(x => x.Id);
         }
-
-
     }
 }

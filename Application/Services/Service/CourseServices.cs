@@ -2,19 +2,18 @@
 using AcademyManager.Domain.Entities;
 using AcademyManager.Domain.Repositories.CommandRepositories;
 using AcademyManager.Domain.Repositories.QueryRepositories;
-using System.Runtime.CompilerServices;
 
-namespace AcademyManager.Application.Services
+namespace AcademyManager.Application.Services.Service
 {
-    public class CourseServices : ICourseServices
+    public class CourseServices:ICourseServices
     {
         private readonly ICourseCommandRepository _courseCommandRepository;
         private readonly ICourseQueryRepository _courseQueryRepository;
 
-        public CourseServices(ICourseQueryRepository courseQueryRepository , ICourseCommandRepository courseCommandRepository   )
+        public CourseServices(ICourseQueryRepository courseQueryRepository, ICourseCommandRepository courseCommandRepository)
         {
-                _courseCommandRepository = courseCommandRepository;
-                _courseQueryRepository = courseQueryRepository; 
+            _courseCommandRepository = courseCommandRepository;
+            _courseQueryRepository = courseQueryRepository;
         }
 
         public async Task<Guid> CreateNewCourseAsync(CourseDto courseDto)
@@ -29,8 +28,8 @@ namespace AcademyManager.Application.Services
                 IsActive = courseDto.IsActive
             };
 
-            await _courseCommandRepository.CreateAsync(course);   
-            await _courseCommandRepository.SaveChangesAsync();  
+            await _courseCommandRepository.CreateAsync(course);
+            await _courseCommandRepository.SaveChangesAsync();
             return course.Id;
 
 
@@ -43,7 +42,7 @@ namespace AcademyManager.Application.Services
 
         public async Task<Course> GetCourseByIdAsync(Guid courseId)
         {
-            return await _courseQueryRepository.GetByIdAsync(courseId); 
+            return await _courseQueryRepository.GetByIdAsync(courseId);
         }
 
         public async Task<bool> UpdateCourseMainStatusAsync(Guid courseId, bool isActive)

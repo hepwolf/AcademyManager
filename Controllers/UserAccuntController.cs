@@ -1,6 +1,9 @@
 ﻿using AcademyManager.Application.DTO;
-using AcademyManager.Application.Services;
+using AcademyManager.Application.Services.Service;
+using AcademyManager.Application.Validators;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq.Dynamic.Core.Tokenizer;
 
 namespace AcademyManager.Controllers
 {
@@ -18,9 +21,14 @@ namespace AcademyManager.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserDto registerDto)
         {
+            
+            RegisterValidator lValidator = new RegisterValidator();
+            await lValidator.ValidateAndThrowAsync(registerDto); 
+
+
             if (!ModelState.IsValid)
             {
-                return BadRequest("Invalid registration request");
+                return BadRequest(ModelState);
             }
 
             var newUser = await _userServices.RegisterUserAsync(registerDto);
@@ -38,17 +46,20 @@ namespace AcademyManager.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginUserDto loginDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest("Invalid login request");
-            }
+            LoginValidator lValidator = new LoginValidator();
+            await lValidator.ValidateAndThrowAsync(loginDto);
+
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest("Invalid login request");
+            //}
 
             var token = await _userServices.LoginUserAsync(loginDto);
 
-            if (token == null)
-            {
-                return Unauthorized("Invalid credentials");
-            }
+            //if (token == null)
+            //{
+            //    return Unauthorized("Invalid credentials");
+            //}
 
             return Ok(new { Token = token });
         }

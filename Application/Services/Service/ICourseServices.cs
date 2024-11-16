@@ -1,7 +1,7 @@
 ﻿using AcademyManager.Application.DTO;
 using AcademyManager.Domain.Entities;
 
-namespace AcademyManager.Application.Services
+namespace AcademyManager.Application.Services.Service
 {
     public interface ICourseServices
     {
@@ -10,7 +10,6 @@ namespace AcademyManager.Application.Services
         Task<Guid> CreateNewCourseAsync(CourseDto courseDto);
         Task<bool> UpdateCourseMainStatusAsync(Guid courseId, bool isActive);
         Task<bool> CheckCourseTimeSlotAvailabilityAsync(DateTime startTime, DateTime endTime, Guid academyId);
-
 
     }
 }

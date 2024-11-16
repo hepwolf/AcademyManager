@@ -1,12 +1,16 @@
 ﻿using AcademyManager.Application.DTO;
 using AcademyManager.Application.Services;
+using AcademyManager.Application.Services.CustomAttribute;
+using AcademyManager.Application.Services.Service;
 using AcademyManager.Domain.Entities;
 using AcademyManager.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 
 namespace AcademyManager.Controllers
 {
+    [Authorize(Roles = "Admin,Manager")]
     [ApiController]
     [Route("[controller]")]
     public class CourseController : ControllerBase
@@ -21,6 +25,7 @@ namespace AcademyManager.Controllers
         [HttpGet("get-all-course")]
         public async Task<IActionResult> GetCourses()
         {
+            
             var courses = await _courseServices .GetAllCoursesAsync();
 
 
@@ -53,6 +58,10 @@ namespace AcademyManager.Controllers
         [HttpPost("creat-course")]
         public async Task<IActionResult> CreateCourse([FromBody] CreateCourseModel model)
         {
+            if (!User.IsInRole("Admin"))
+            {
+                return Forbid("Only admins can create courses.");
+            }
             if (await _courseServices.CheckCourseTimeSlotAvailabilityAsync(model.StartTime, model.EndTime, model.AcademyId))
             {
                 return Conflict("A course is already scheduled during this time slot.");

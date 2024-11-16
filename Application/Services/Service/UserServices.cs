@@ -1,41 +1,45 @@
-﻿
+﻿using AcademyManager.Application.DTO;
+using AcademyManager.Application.Validators;
 using AcademyManager.Domain.Entities;
-using AcademyManager.Application.DTO;
 using AcademyManager.Domain.Repositories.CommandRepositories;
 using AcademyManager.Domain.Repositories.QueryRepositories;
-using System.Text;
+using Chessie.ErrorHandling;
 using System.Security.Cryptography;
+using System.Text;
 
-namespace AcademyManager.Application.Services
+namespace AcademyManager.Application.Services.Service
 {
-    public class UserServices : IUserServices
+    public class UserServices:IUserServices
     {
         private readonly IUserCommandRepository _userCommandRepository;
-        private readonly IUserQueryRepository _userQueryRepository; 
-        private readonly IJwtTokenGenerator _jwtTokenGenerator; 
-        public UserServices(IUserCommandRepository userCommandRepository,IUserQueryRepository userQueryRepository,IJwtTokenGenerator
-            jwtTokenGenerator)
+        private readonly IUserQueryRepository _userQueryRepository;
+        private readonly IJwtTokenGenerator _jwtTokenGenerator;
+       
+        public UserServices(IUserCommandRepository userCommandRepository, 
+            IUserQueryRepository userQueryRepository, IJwtTokenGenerator
+            jwtTokenGenerator
+            )
         {
-                _userCommandRepository = userCommandRepository;
-            _userQueryRepository = userQueryRepository; 
-            _jwtTokenGenerator = jwtTokenGenerator; 
+            _userCommandRepository = userCommandRepository;
+            _userQueryRepository = userQueryRepository;
+            _jwtTokenGenerator = jwtTokenGenerator;
         }
 
 
         public async Task<UserAccount> RegisterUserAsync(RegisterUserDto registerDto)
         {
-            
+
             if (await _userQueryRepository.GetUserByEmailAsync(registerDto.Email) != null ||
                 await _userQueryRepository.GetUserByUsernameAsync(registerDto.UserName) != null)
             {
-                return null; 
+                return null;
             }
 
             string salt = GenerateSalt();
 
             var hashedpassword = HashPasswordWithSalt(registerDto.Password, salt);
 
-            
+
             var user = new UserAccount
             {
                 FirstName = registerDto.FirstName,
@@ -50,29 +54,29 @@ namespace AcademyManager.Application.Services
             await _userCommandRepository.AddUserAsync(user);
             await _userCommandRepository.SaveChangesAsync();
 
-            return user; 
+            return user;
         }
 
         public async Task<string> LoginUserAsync(LoginUserDto loginDto)
         {
             var user = await _userQueryRepository.GetUserByUsernameAsync(loginDto.UserName);
 
-            if (user == null || !VerifyPassword(user.Password, loginDto.Password,user.Salt))
+            if (user == null || !VerifyPassword(user.Password, loginDto.Password, user.Salt))
             {
                 return null;
             }
 
             // Generate JWT Token
-            var token = _jwtTokenGenerator.GenerateToken(user);
+            var token = await _jwtTokenGenerator.GenerateTokenAsync(user);
 
             var userTkoken = new UserToken()
             {
-                UserId=user.Id,
+                UserId = user.Id,
                 Token = token,
-                Expiration=DateTime.UtcNow.AddMinutes(60),  
+                Expiration = DateTime.UtcNow.AddMinutes(60),
             };
-            await _userCommandRepository.AddUserTokenAsync(userTkoken); 
-            await _userCommandRepository.SaveChangesAsync();    
+            await _userCommandRepository.AddUserTokenAsync(userTkoken);
+            await _userCommandRepository.SaveChangesAsync();
             return token;
         }
 
@@ -92,9 +96,9 @@ namespace AcademyManager.Application.Services
             return hashedPassword == hashedInputPassword;
         }
 
-        private string HashPasswordWithSalt(string password, string salt )
+        private string HashPasswordWithSalt(string password, string salt)
         {
-            var combinedpassword= password + salt;  
+            var combinedpassword = password + salt;
 
 
             using (var sha256 = SHA256.Create())

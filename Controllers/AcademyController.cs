@@ -1,6 +1,7 @@
 ﻿using AcademyManager.Application.DTO;
 using AcademyManager.Application.Mapper;
 using AcademyManager.Application.Services;
+using AcademyManager.Application.Services.Service;
 using AcademyManager.Domain.Entities;
 using AcademyManager.Domain.Repositories;
 using AcademyManager.Infrastructure.Repositories;

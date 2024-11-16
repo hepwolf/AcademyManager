@@ -1,7 +1,7 @@
-﻿using AcademyManager.Application.DTO;
-using AcademyManager.Domain.Entities;
+﻿   using AcademyManager.Application.DTO;
+   using AcademyManager.Domain.Entities;
 
-namespace AcademyManager.Application.Services
+namespace AcademyManager.Application.Services.Service
 {
     public interface IAcademyServices
     {

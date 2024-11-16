@@ -2,7 +2,7 @@
 
 namespace AcademyManager.Domain.Repositories.QueryRepositories
 {
-    public interface IAcademyQueryRepository : IGenericQueryRepository<Academy>
+    public interface IAcademyQueryRepository : IGenericQueryRepository<Academy,Guid>
     {
 
     }

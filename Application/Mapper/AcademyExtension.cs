@@ -87,7 +87,7 @@ namespace AcademyManager.Application.Mapper
                 Password = userAccount.Password,
             };
         }
-        public static List<LoginUserDto> ConvertToUserLoginDto(this IEnumerable<UserAccount> userAccounts)
+        public static List<LoginUserDto> ConvertToUserLoginDtos(this IEnumerable<UserAccount> userAccounts)
         {
             var result = new List<LoginUserDto>();
             foreach (var userAccount in userAccounts)
@@ -106,12 +106,46 @@ namespace AcademyManager.Application.Mapper
                 Password = userAccount.Password,
             };
         }
-        public static List<RegisterUserDto> ConvertToUserRegister(this IEnumerable<UserAccount> userAccounts)
+        public static List<RegisterUserDto> ConvertToUserRegisterDtos(this IEnumerable<UserAccount> userAccounts)
         {
             var result= new List<RegisterUserDto>();    
             foreach(var userAccount in userAccounts)
                 result.Add(userAccount.ConvertToUserRegisterDto());
             return result;  
+        }
+        public static RoleDto ConvertRoleDto(this Role role)
+        {
+            return new RoleDto()
+            {
+                
+                Name = role.Name,
+                Displayname = role.Displayname,
+            };
+
+        }
+        public static List<RoleDto> ConvertRoleDtos(this IEnumerable<Role> roles)
+        {
+            var result = new List<RoleDto>();
+            foreach (var role in roles)
+              result.Add(role.ConvertRoleDto());
+            return result;
+        }  
+        public static UserRoleDto ConvertUserRoleDto(this UserRole userRole)
+        {
+            return new UserRoleDto()
+            {
+                
+                RoleId = userRole.RoleId,
+                UserId = userRole.UserId,
+
+            };
+        }
+        public static List<UserRoleDto> ConvertUserRoleDtos(this IEnumerable<UserRole> userRoles)
+        {
+            var result  = new List<UserRoleDto>();
+            foreach (var  userRole in userRoles)
+                result.Add(userRole.ConvertUserRoleDto());  
+            return result;
         }
 
 
